@@ -163,6 +163,21 @@
     let nextDuration = document.getElementById("nextDuration");
     let timerInterval;
     let isPaused = false;
+    let beepSound = new Audio('./beep.mp3'); // Replace with the path to your beep sound file
+    let startSound = new Audio('./start.mp3'); // Replace with the path to your start sound file
+    let wakeLock = null;
+
+    async function requestWakeLock() {
+        try {
+            wakeLock = await navigator.wakeLock.request('screen');
+            wakeLock.addEventListener('release', () => {
+                console.log('Wake Lock was released');
+            });
+            console.log('Wake Lock is active');
+        } catch (err) {
+            console.error(`${err.name}, ${err.message}`);
+        }
+    }
 
     function loadWorkout(workoutId) {
         currentIndex = 0;
@@ -188,6 +203,11 @@
         const schedule = workouts[document.getElementById("workoutSelect").value];
         circleText.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 
+        // Play beep sound for the last 3 seconds of every step
+        if (currentTime <= 3 && currentTime > 0) {
+            beepSound.play();
+        }
+
         // Update progress bar for current segment
         const totalSegmentDuration = schedule[currentIndex].duration;
         const progressPercent = ((totalSegmentDuration - currentTime) / totalSegmentDuration) * 100;
@@ -207,6 +227,7 @@
                 nextStatus.textContent = schedule[currentIndex].status; // Update next segment status
                 nextDuration.textContent = `Duration: ${schedule[currentIndex].duration}s`; // Update next segment duration
                 progressBar.style.width = '0%'; // Reset progress bar for the next segment
+                startSound.play();
             } else {
                 clearInterval(timerInterval);
                 statusDisplay.textContent = "Workout Complete!";
@@ -231,6 +252,7 @@
             totalProgressBar.style.width = '0%'; // Reset total progress bar
         }
         timerInterval = setInterval(updateTimer, 1000);
+        requestWakeLock(); // Request wake lock when the timer starts
     }
 
     function pauseTimer() {
@@ -249,6 +271,10 @@
         progressBar.style.width = '0%'; // Reset progress bar
         totalProgressBar.style.width = '0%'; // Reset total progress bar
         isPaused = false;
+        if (wakeLock !== null) {
+            wakeLock.release();
+            wakeLock = null;
+        }
     }
 
     document.getElementById("startButton").onclick = startTimer;
