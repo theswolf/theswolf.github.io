@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Timer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        #status {
+            font-size: 1.5em;
+            margin: 20px 0;
+        }
+        button {
+            font-size: 1em;
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        #circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 10px solid #ddd; /* Background of the circle */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            margin: 20px auto;
+        }
+        #progress {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            clip-path: circle(50% at 50% 50%);
+            background-color: transparent; /* No fill */
+            border: 10px solid #4caf50; /* Green for current segment */
+            transform: rotate(0deg);
+            transition: transform 1s linear;
+        }
+        #circleText {
+            font-size: 1.5em;
+            position: absolute;
+        }
+        #nextSegment {
+            background-color: #e0f7fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        #totalProgressBar {
+            width: 100%;
+            background-color: #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        #totalProgress {
+            height: 30px;
+            background-color: #f44336; /* Red for total progress */
+            width: 100%;
+            transition: width 1s linear;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Workout Timer</h1>
+<div>
+    <label for="workoutSelect">Choose a workout:</label>
+    <select id="workoutSelect">
+        <option value="1">Workout A</option>
+        <option value="2">Workout B</option>
+        <option value="3">Workout C</option>
+    </select>
+</div>
+<div id="status">Get Ready!</div>
+<div id="circle">
+    <div id="progress"></div>
+    <div id="circleText">0:00</div>
+</div>
+<div id="nextSegment">
+    <strong>Next Segment:</strong><br>
+    <span id="nextStatus">2/10 (80 rpm) - 00:00</span>
+</div>
+<div id="totalProgressBar">
+    <div id="totalProgress"></div>
+</div>
+<button id="startButton">Start</button>
+<button id="pauseButton">Pause</button>
+<button id="stopButton">Stop</button>
+
+<script>
+    const workouts = {
+        1: [
+            { duration: 60, status: "2/10 (80 rpm)" },
+            { duration: 120, status: "3/10 (80 rpm)" },
+            { duration: 120, status: "4/10 (80 rpm)" },
+        ],
+        2: [
+            { duration: 90, status: "1/5 (70 rpm)" },
+            { duration: 150, status: "2/5 (90 rpm)" },
+            { duration: 60, status: "3/5 (80 rpm)" },
+        ],
+        3: [
+            { duration: 120, status: "1/4 (75 rpm)" },
+            { duration: 180, status: "2/4 (85 rpm)" },
+            { duration: 240, status: "3/4 (95 rpm)" },
+        ]
+    };
+
+    let currentIndex = 0;
+    let currentTime = 0;
+    let totalDuration = 0;
+    let statusDisplay = document.getElementById("status");
+    let totalProgressBar = document.getElementById("totalProgress");
+    let circleText = document.getElementById("circleText");
+    let nextStatus = document.getElementById("nextStatus");
+    let progress = document.getElementById("progress");
+    let timerInterval;
+    let isPaused = false;
+
+    function loadWorkout(workoutId) {
+        currentIndex = 0;
+        const schedule = workouts[workoutId];
+        totalDuration = schedule.reduce((total, segment) => total + segment.duration, 0);
+        currentTime = schedule[currentIndex].duration;
+        statusDisplay.textContent = "Get Ready!";
+        nextStatus.textContent = `${schedule[currentIndex].status} - ${formatTime(schedule[currentIndex].duration)}`;
+        progress.style.transform = 'rotate(0deg)';
+        totalProgressBar.style.width = '0%';
+        circleText.textContent = formatTime(currentTime);
+    }
+
+    function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    function updateTimer() {
+        circleText.textContent = formatTime(currentTime);
+
+        // Update circular progress for current segment
+        const totalSegmentDuration = workouts[document.getElementById("workoutSelect").value][currentIndex].duration;
+        const progressPercent = ((totalSegmentDuration - currentTime) / totalSegmentDuration) * 100;
+        const rotationDegree = (progressPercent / 100) * 360; // Convert to degrees
+        progress.style.transform = `rotate(${rotationDegree}deg)`;
+
+        // Update total progress bar
+        const totalProgressPercent = ((totalDuration - (workouts[document.getElementById("workoutSelect").value].slice(0, currentIndex).reduce((total, segment) => total + segment.duration, 0) + (totalSegmentDuration - currentTime))) / totalDuration) * 100;
+        totalProgressBar.style.width = `${totalProgressPercent}%`;
+
+        if (currentTime > 0) {
+            currentTime--;
+        } else {
+            currentIndex++;
+            const schedule = workouts[document.getElementById("workoutSelect").value];
+            if (currentIndex < schedule.length) {
+                currentTime = schedule[currentIndex].duration;
+                statusDisplay.textContent = `Current: ${schedule[currentIndex - 1].status}`;
+                nextStatus.textContent = `${schedule[currentIndex].status} - ${formatTime(schedule[currentIndex].duration)}`;
+                progress.style.transform = 'rotate(0deg)'; // Reset circular progress for the next segment
+            } else {
+                clearInterval(timerInterval);
+                statusDisplay.textContent = "Workout Complete!";
+                progress.style.transform = 'rotate(360deg)'; // Fill circular progress
+                totalProgressBar.style.width = '100%'; // Fill total progress bar
+            }
+        }
+    }
+
+    function startTimer() {
+        const workoutId = document.getElementById("workoutSelect").value;
+        loadWorkout(workoutId);
+        if (isPaused) {
+            isPaused = false;
+        } else {
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+    }
+
+    function pauseTimer() {
+        isPaused = true;
+        clearInterval(timerInterval);
+    }
+
+    function stopTimer() {
+        clearInterval(timerInterval);
+        loadWorkout(document.getElementById("workoutSelect").value);
+        isPaused = false;
+    }
+
+    document.getElementById("startButton").onclick = startTimer;
+    document.getElementById("pauseButton").onclick = pauseTimer;
+    document.getElementById("stopButton").onclick = stopTimer;
+    document.getElementById("workoutSelect").onchange = function() {
+        loadWorkout(this.value);
+    };
+
+    // Load the initial workout
+    loadWorkout(1);
+</script>
+
+</body>
+</html>
