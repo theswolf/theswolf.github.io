@@ -250,6 +250,7 @@
             nextDuration.textContent = schedule[currentIndex + 1] ? `Duration: ${schedule[currentIndex + 1].duration}s` : "Duration: 0s"; // Update next segment duration
             progressBar.style.width = '0%'; // Reset progress bar
             totalProgressBar.style.width = '0%'; // Reset total progress bar
+            startSound.play();
         }
         timerInterval = setInterval(updateTimer, 1000);
         requestWakeLock(); // Request wake lock when the timer starts
@@ -277,8 +278,22 @@
         }
     }
 
+    function pauseResumeTimer() {
+        if (isPaused) {
+            // Resume the timer
+            timerInterval = setInterval(updateTimer, 1000);
+            isPaused = false;
+            document.getElementById("pauseButton").textContent = "Pause";
+        } else {
+            // Pause the timer
+            clearInterval(timerInterval);
+            isPaused = true;
+            document.getElementById("pauseButton").textContent = "Resume";
+        }
+    }
+
     document.getElementById("startButton").onclick = startTimer;
-    document.getElementById("pauseButton").onclick = pauseTimer;
+    document.getElementById("pauseButton").onclick = pauseResumeTimer;
     document.getElementById("stopButton").onclick = stopTimer;
 </script>
 
