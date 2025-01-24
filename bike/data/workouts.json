@@ -1,0 +1,64 @@
+[
+  {
+    "name": "Demo",
+    "segments": [
+      {"duration": 10, "status": "2/10 (80 rpm)", "intensity": 2},
+      {"duration": 10, "status": "3/10 (80 rpm)", "intensity": 3}
+    ]
+  },
+  {
+    "name": "Sweets Spot",
+    "segments": [
+      {"duration": 60, "status": "2/10 (80 rpm)", "intensity": 2},
+      {"duration": 120, "status": "3/10 (80 rpm)", "intensity": 3},
+      {"duration": 120, "status": "4/10 (80 rpm)", "intensity": 4},
+      {"duration": 60, "status": "3/10 (80 rpm)", "intensity": 3},
+      {"duration": 60, "status": "7/10 (80 rpm)", "intensity": 7},
+      {"duration": 60, "status": "5/10 (80 rpm)", "intensity": 5},
+      {"duration": 120, "status": "7/10 (80 rpm)", "intensity": 7},
+      {"duration": 120, "status": "5/10 (80 rpm)", "intensity": 5},
+      {"duration": 180, "status": "7/10 (80 rpm)", "intensity": 7},
+      {"duration": 180, "status": "5/10 (80 rpm)", "intensity": 5},
+      {"duration": 120, "status": "7/10 (80 rpm)", "intensity": 7},
+      {"duration": 120, "status": "5/10 (80 rpm)", "intensity": 5},
+      {"duration": 60, "status": "8/10 (100 rpm)", "intensity": 8},
+      {"duration": 60, "status": "2/10 (80 rpm)", "intensity": 2},
+      {"duration": 30, "status": "8/10 (100 rpm)", "intensity": 8},
+      {"duration": 30, "status": "2/10 (80 rpm)", "intensity": 2},
+      {"duration": 30, "status": "9/10 (100 rpm)", "intensity": 9},
+      {"duration": 30, "status": "2/10 (80 rpm)", "intensity": 2},
+      {"duration": 120, "status": "6/10 (80 rpm)", "intensity": 6},
+      {"duration": 120, "status": "3/10 (80 rpm)", "intensity": 3}
+    ]
+  },
+  {
+    "name": "Train Like Ollie",
+    "segments": [
+      {"duration": 60, "status": "2/10 (80 rpm)", "intensity": 2},
+      {"duration": 60, "status": "4/10 (80 rpm)", "intensity": 4},
+      {"duration": 120, "status": "6/10 (80 rpm)", "intensity": 6},
+      {"duration": 60, "status": "2/10 (80 rpm)", "intensity": 2},
+      {"duration": 240, "status": "6/10 (80 rpm)", "intensity": 6},
+      {"duration": 120, "status": "4/10 (80 rpm)", "intensity": 4},
+      {"duration": 240, "status": "6/10 (80 rpm)", "intensity": 6},
+      {"duration": 120, "status": "4/10 (80 rpm)", "intensity": 4},
+      {"duration": 240, "status": "6/10 (80 rpm)", "intensity": 6},
+      {"duration": 120, "status": "4/10 (80 rpm)", "intensity": 4},
+      {"duration": 240, "status": "6/10 (80 rpm)", "intensity": 6},
+      {"duration": 120, "status": "4/10 (80 rpm)", "intensity": 4},
+      {"duration": 60, "status": "2/10 (80 rpm)", "intensity": 2}
+    ]
+  },
+  {
+    "name": "Cadence",
+    "segments": [
+      {"duration": 180, "status": "3/10 (90 rpm)", "intensity": 3},
+      {"duration": 300, "status": "7/10 (50-60 rpm)", "intensity": 7},
+      {"duration": 180, "status": "3/10 (90 rpm)", "intensity": 3},
+      {"duration": 300, "status": "7/10 (50-60 rpm)", "intensity": 7},
+      {"duration": 180, "status": "3/10 (90 rpm)", "intensity": 3},
+      {"duration": 300, "status": "7/10 (50-60 rpm)", "intensity": 7},
+      {"duration": 360, "status": "3/10 (90 rpm)", "intensity": 3}
+    ]
+  }
+]

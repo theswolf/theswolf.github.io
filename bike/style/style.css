@@ -1,0 +1,62 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.circle {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    border: 10px solid green;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 20px auto;
+}
+
+.timer {
+    font-size: 2em;
+}
+
+.timer, .intensity, .next-segment {
+    margin: 5px 0;
+}
+
+.space {
+    margin: 20px;
+}
+
+#segmentProgress::-webkit-progress-value {
+    background-color: green;
+}
+#segmentProgress::-moz-progress-bar {
+    background-color: green;
+}
+#segmentProgress::-ms-fill {
+    background-color: green;
+}
+
+#totalProgress::-webkit-progress-value {
+    background-color: red;
+}
+#totalProgress::-moz-progress-bar {
+    background-color: red;
+}
+#totalProgress::-ms-fill {
+    background-color: red;
+}
+
+@keyframes blink {
+    0% { color: red; }
+    50% { color: white; }
+    100% { color: red; }
+}
+
+.blinking {
+    animation: blink 1s infinite;
+    font-size: 2em;
+}

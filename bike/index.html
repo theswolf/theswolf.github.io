@@ -4,298 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Workout Timer</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
-
-        #status {
-            font-size: 1.5em;
-            margin: 20px 0;
-        }
-
-        button {
-            font-size: 1em;
-            padding: 10px 15px;
-            margin: 5px;
-            cursor: pointer;
-        }
-
-        #progressBar, #totalProgressBar {
-            width: 100%;
-            background-color: #ddd;
-            border-radius: 5px;
-            overflow: hidden;
-            margin: 20px 0;
-        }
-
-        #progress {
-            height: 30px;
-            background-color: #4caf50; /* Green for current segment */
-            width: 100%;
-            transition: width 1s linear;
-        }
-
-        #totalProgress {
-            height: 30px;
-            background-color: #f44336; /* Red for total progress */
-            width: 100%;
-            transition: width 1s linear;
-        }
-
-        #nextSegment {
-            background-color: #e0f7fa;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-
-        #circle {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: 10px solid #4caf50;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            margin: 20px auto;
-        }
-
-        #circleText {
-            font-size: 1.5em;
-        }
-    </style>
+    <link rel="stylesheet" href="./style/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+<audio id="startSound" src="start.mp3"></audio>
+<audio id="beepSound" src="beep.mp3"></audio>
 
 <h1>Workout Timer</h1>
-<div>
-    <label for="workoutSelect">Choose a workout:</label>
-    <select id="workoutSelect">
-        <option value="1">Sweet Session</option>
-        <option value="2">Train like Ollie</option>
-        <option value="3">Low Cadence</option>
-    </select>
+<select id="workoutSelect"></select>
+<canvas id="workoutChart" width="400" height="200"></canvas>
+
+<div class="circle">
+    <div class="timer" id="timer">00:00</div>
+    <div class="intensity" id="intensity">Current: 0</div>
+    <div class="next-segment" id="nextSegment">Next: N/A</div>
 </div>
-<div id="status">Get Ready!</div>
-<div id="circle">
-    <div id="circleText">0:00</div>
+
+<div class="space">
+    <progress id="segmentProgress" value="0" max="100"></progress>
 </div>
-<div id="nextSegment">
-    <strong>Next Segment:</strong><br>
-    <span id="nextStatus">2/10 (80 rpm)</span><br>
-    <span id="nextDuration" id="nextDuration">Duration: 0s</span>
+<div class="space">
+    <progress id="totalProgress" value="0" max="100"></progress>
 </div>
-<div id="progressBar">
-    <div id="progress"></div>
-</div>
-<div id="totalProgressBar">
-    <div id="totalProgress"></div>
-</div>
+
+
 <button id="startButton">Start</button>
 <button id="pauseButton">Pause</button>
-<button id="stopButton">Stop</button>
-
-<script>
-    const workouts = {
-        1: [
-            {duration: 60, status: "2/10 (80 rpm)"},
-            {duration: 120, status: "3/10 (80 rpm)"},
-            {duration: 120, status: "4/10 (80 rpm)"},
-            {duration: 60, status: "3/10 (80 rpm)"},
-            {duration: 60, status: "7/10 (80 rpm)"},
-            {duration: 60, status: "5/10 (80 rpm)"},
-            {duration: 120, status: "7/10 (80 rpm)"},
-            {duration: 120, status: "5/10 (80 rpm)"},
-            {duration: 180, status: "7/10 (80 rpm)"},
-            {duration: 180, status: "5/10 (80 rpm)"},
-            {duration: 120, status: "7/10 (80 rpm)"},
-            {duration: 120, status: "5/10 (80 rpm)"},
-            {duration: 60, status: "8/10 (100 rpm)"},
-            {duration: 60, status: "2/10 (80 rpm)"},
-            {duration: 30, status: "8/10 (100 rpm)"},
-            {duration: 30, status: "2/10 (80 rpm)"},
-            {duration: 30, status: "9/10 (100 rpm)"},
-            {duration: 30, status: "2/10 (80 rpm)"},
-            {duration: 120, status: "6/10 (80 rpm)"},
-            {duration: 120, status: "3/10 (80 rpm)"},
-        ],
-        2: [
-            {duration: 60, status: "2/10 (80 rpm)"},
-            {duration: 60, status: "4/10 (80 rpm)"},
-            {duration: 120, status: "6/10 (80 rpm)"},
-            {duration: 60, status: "2/10 (80 rpm)"},
-            {duration: 240, status: "6/10 (80 rpm)"},
-            {duration: 120, status: "4/10 (80 rpm)"},
-            {duration: 240, status: "6/10 (80 rpm)"},
-            {duration: 120, status: "4/10 (80 rpm)"},
-            {duration: 240, status: "6/10 (80 rpm)"},
-            {duration: 120, status: "4/10 (80 rpm)"},
-            {duration: 240, status: "6/10 (80 rpm)"},
-            {duration: 120, status: "4/10 (80 rpm)"},
-            {duration: 60, status: "2/10 (80 rpm)"},
-        ],
-
-        3: [
-            {duration: 180, status: "3/10 (90 rpm)"},
-            {duration: 300, status: "7/10 (50-60 rpm)"},
-            {duration: 180, status: "3/10 (90 rpm)"},
-            {duration: 300, status: "7/10 (50-60 rpm)"},
-            {duration: 180, status: "3/10 (90 rpm)"},
-            {duration: 300, status: "7/10 (50-60 rpm)"},
-            {duration: 360, status: "3/10 (90 rpm)"},
-        ]
-
-    };
-
-    let currentIndex = 0;
-    let currentTime = 0;
-    let totalDuration = 0;
-    let statusDisplay = document.getElementById("status");
-    let progressBar = document.getElementById("progress");
-    let totalProgressBar = document.getElementById("totalProgress");
-    let circleText = document.getElementById("circleText");
-    let nextStatus = document.getElementById("nextStatus");
-    let nextDuration = document.getElementById("nextDuration");
-    let timerInterval;
-    let isPaused = false;
-    let beepSound = new Audio('./beep.mp3'); // Replace with the path to your beep sound file
-    let startSound = new Audio('./start.mp3'); // Replace with the path to your start sound file
-    let wakeLock = null;
-
-    async function requestWakeLock() {
-        try {
-            wakeLock = await navigator.wakeLock.request('screen');
-            wakeLock.addEventListener('release', () => {
-                console.log('Wake Lock was released');
-            });
-            console.log('Wake Lock is active');
-        } catch (err) {
-            console.error(`${err.name}, ${err.message}`);
-        }
-    }
-
-    function loadWorkout(workoutId) {
-        currentIndex = 0;
-        const schedule = workouts[workoutId];
-        totalDuration = schedule.reduce((total, segment) => total + segment.duration, 0);
-        currentTime = schedule[currentIndex].duration;
-        statusDisplay.textContent = "Get Ready!";
-        nextStatus.textContent = `${schedule[currentIndex].status} - ${formatTime(schedule[currentIndex].duration)}`;
-        progress.style.transform = 'rotate(0deg)';
-        totalProgressBar.style.width = '0%';
-        circleText.textContent = formatTime(currentTime);
-    }
-
-    function formatTime(seconds) {
-        const minutes = Math.floor(seconds / 60);
-        const secs = seconds % 60;
-        return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-    }
-
-    function updateTimer() {
-        const minutes = Math.floor(currentTime / 60);
-        const seconds = currentTime % 60;
-        const schedule = workouts[document.getElementById("workoutSelect").value];
-        circleText.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-
-        // Play beep sound for the last 3 seconds of every step
-        if (currentTime <= 3 && currentTime > 0) {
-            beepSound.play();
-        }
-
-        // Update progress bar for current segment
-        const totalSegmentDuration = schedule[currentIndex].duration;
-        const progressPercent = ((totalSegmentDuration - currentTime) / totalSegmentDuration) * 100;
-        progressBar.style.width = `${progressPercent}%`;
-
-        // Update total progress bar
-        const totalProgressPercent = ((totalDuration - (schedule.slice(0, currentIndex).reduce((total, segment) => total + segment.duration, 0) + (totalSegmentDuration - currentTime))) / totalDuration) * 100;
-        totalProgressBar.style.width = `${totalProgressPercent}%`;
-
-        if (currentTime > 0) {
-            currentTime--;
-        } else {
-            currentIndex++;
-            if (currentIndex < schedule.length) {
-                currentTime = schedule[currentIndex].duration;
-                statusDisplay.textContent = `Current: ${schedule[currentIndex - 1].status}`;
-                nextStatus.textContent = schedule[currentIndex].status; // Update next segment status
-                nextDuration.textContent = `Duration: ${schedule[currentIndex].duration}s`; // Update next segment duration
-                progressBar.style.width = '0%'; // Reset progress bar for the next segment
-                startSound.play();
-            } else {
-                clearInterval(timerInterval);
-                statusDisplay.textContent = "Workout Complete!";
-                progressBar.style.width = '100%'; // Fill progress bar
-                totalProgressBar.style.width = '100%'; // Fill total progress bar
-            }
-        }
-    }
-
-    function startTimer() {
-        const workoutId = document.getElementById("workoutSelect").value;
-        const schedule = workouts[workoutId];
-        loadWorkout(workoutId);
-        if (isPaused) {
-            isPaused = false;
-        } else {
-            currentTime = schedule[currentIndex].duration;
-            statusDisplay.textContent = `Current: ${schedule[currentIndex].status}`;
-            nextStatus.textContent = schedule[currentIndex + 1] ? schedule[currentIndex + 1].status : "None"; // Update next segment status
-            nextDuration.textContent = schedule[currentIndex + 1] ? `Duration: ${schedule[currentIndex + 1].duration}s` : "Duration: 0s"; // Update next segment duration
-            progressBar.style.width = '0%'; // Reset progress bar
-            totalProgressBar.style.width = '0%'; // Reset total progress bar
-            startSound.play();
-        }
-        timerInterval = setInterval(updateTimer, 1000);
-        requestWakeLock(); // Request wake lock when the timer starts
-    }
-
-    function pauseTimer() {
-        isPaused = true;
-        clearInterval(timerInterval);
-    }
-
-    function stopTimer() {
-        clearInterval(timerInterval);
-        currentIndex = 0;
-        currentTime = schedule[currentIndex].duration;
-        circleText.textContent = "0:00";
-        statusDisplay.textContent = "Get Ready!";
-        nextStatus.textContent = schedule[currentIndex + 1] ? schedule[currentIndex + 1].status : "None"; // Update next segment status
-        nextDuration.textContent = schedule[currentIndex + 1] ? `Duration: ${schedule[currentIndex + 1].duration}s` : "Duration: 0s"; // Update next segment duration
-        progressBar.style.width = '0%'; // Reset progress bar
-        totalProgressBar.style.width = '0%'; // Reset total progress bar
-        isPaused = false;
-        if (wakeLock !== null) {
-            wakeLock.release();
-            wakeLock = null;
-        }
-    }
-
-    function pauseResumeTimer() {
-        if (isPaused) {
-            // Resume the timer
-            timerInterval = setInterval(updateTimer, 1000);
-            isPaused = false;
-            document.getElementById("pauseButton").textContent = "Pause";
-        } else {
-            // Pause the timer
-            clearInterval(timerInterval);
-            isPaused = true;
-            document.getElementById("pauseButton").textContent = "Resume";
-        }
-    }
-
-    document.getElementById("startButton").onclick = startTimer;
-    document.getElementById("pauseButton").onclick = pauseResumeTimer;
-    document.getElementById("stopButton").onclick = stopTimer;
-</script>
-
+<button id="resetButton">Reset</button>
+<script src="script/engine.js"></script>
 </body>
 </html>
