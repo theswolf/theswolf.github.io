@@ -30,6 +30,10 @@ body {
     margin: 20px;
 }
 
+#workoutChart {
+    display: none;
+}
+
 #segmentProgress::-webkit-progress-value {
     background-color: green;
 }
@@ -60,3 +64,4 @@ body {
     animation: blink 1s infinite;
     font-size: 2em;
 }
+

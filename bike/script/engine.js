@@ -200,3 +200,14 @@ document.getElementById('resetButton').addEventListener('click', () => {
     document.getElementById('pauseButton').textContent = 'Pause';
     releaseWakeLock(); // Release wake lock
 });
+
+document.getElementById('showChartButton').addEventListener('click', () => {
+    const chart = document.getElementById('workoutChart');
+    if (chart.style.display === 'none') {
+        chart.style.display = 'block';
+        document.getElementById('showChartButton').textContent = 'Hide Chart';
+    } else {
+        chart.style.display = 'none';
+        document.getElementById('showChartButton').textContent = 'Show Chart';
+    }
+});
