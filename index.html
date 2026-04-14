@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Christian Geymonat IT Specialist</title>
-    <meta name="description" content="Offering customized software development services, mobile app development, and web application solutions tailored to your business needs.">
-    <meta name="keywords" content="software development, custom software, web applications, mobile app development, SaaS development, API integration, agile development, software solutions">
+    <meta name="description"
+        content="Offering customized software development services, mobile app development, and web application solutions tailored to your business needs.">
+    <meta name="keywords"
+        content="software development, custom software, web applications, mobile app development, SaaS development, API integration, agile development, software solutions">
     <meta name="author" content="Christian Geymonat">
 
     <!-- Open Graph tags for social media sharing -->
     <meta property="og:title" content="Professional Software Development Services">
-    <meta property="og:description" content="Expert software development, mobile app solutions, and innovative web applications.">
+    <meta property="og:description"
+        content="Expert software development, mobile app solutions, and innovative web applications.">
     <meta property="og:image" content="https://theswolf.github.io/images/me.jpg">
     <meta property="og:url" content="https://theswolf.github.io/">
     <meta property="og:type" content="website">
@@ -26,11 +30,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Amarante&display=swap" rel="stylesheet">
     <style>
-        body, html {
+        body,
+        html {
             margin: 0;
             padding: 0;
             height: 100%;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
@@ -39,34 +45,54 @@
             font-weight: 400;
             font-style: normal;
         }
+
         a {
             color: white;
         }
+
         .background {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('./images/paris.png') ; /* Replace with your image URL */
+            background-image: url('./images/paris.png');
+            /* Replace with your image URL */
             background-size: cover;
-            background-position: center;;
+            background-position: center;
+            ;
             z-index: -1;
         }
+
         .content {
             position: relative;
             padding: 20px;
             background: rgba(0, 0, 0, 0.5);
             border-radius: 10px;
+            margin: 10px;
+            max-width: 80%;
         }
+
+        .book-links {
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+
+        .book-links a {
+            text-decoration: underline;
+            margin: 0 10px;
+        }
+
         .links {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
+
         .linkwrapper {
             margin: 10%;
         }
+
         .footer {
             background: rgba(0, 0, 0, 0.5);
             color: white;
@@ -76,6 +102,7 @@
             bottom: 0;
             width: 100%;
         }
+
         .fa {
             padding: 10px;
             font-size: 10px;
@@ -89,42 +116,60 @@
         .fa:hover {
             opacity: 0.7;
         }
+
         .fa-linkedin {
             background: #007bb5;
             color: white;
         }
+
         .fa-envelope {
             background: #FF0000;
             color: white;
         }
+
         @media (max-width: 600px) {
             .content {
                 padding: 10px;
             }
+
             .footer {
                 padding: 10px;
             }
         }
     </style>
 </head>
+
 <body>
 
-<div class="background"></div>
-<div class="content">
-    <h1>Christian Geymonat</h1>
-    <p>IT Software Problem Solver</p>
-    <div class="linkwrapper">
-        <p class="links">
-            <a href="https://www.linkedin.com/in/christiangeymonat/" class="fa fa-linkedin"></a>
-            <a href="mailto:info@geymoexperience.fr?subject=Info" class="fa fa-envelope"></a>
-        </p>
+    <div class="background"></div>
+    <div class="content">
+        <h1>Christian Geymonat</h1>
+        <p>IT Software Problem Solver</p>
+        <div class="linkwrapper">
+            <p class="links">
+                <a href="https://www.linkedin.com/in/christiangeymonat/" class="fa fa-linkedin"></a>
+                <a href="mailto:info@geymoexperience.fr?subject=Info" class="fa fa-envelope"></a>
+            </p>
+        </div>
+
     </div>
 
-</div>
+    <div class="content">
+        <p>Download and share my free book<br><strong>"From dev to AI engineer"</strong></p>
+        <div class="book-links">
+            <a href="https://gist.github.com/theswolf/c5e2be44882cb2327b70ace617e5a6f5#file-fromdevtoaiengineerit-md"
+                target="_blank">Italian</a>
+            <a href="https://gist.github.com/theswolf/c5e2be44882cb2327b70ace617e5a6f5#file-fromdevtoaiengineerfr-md"
+                target="_blank">French</a>
+            <a href="https://gist.github.com/theswolf/c5e2be44882cb2327b70ace617e5a6f5#file-fromdevtoaiengineeren-md"
+                target="_blank">English</a>
+        </div>
+    </div>
 
-<div class="footer">
-    <p>&copy;  <a href="https://theswolf.github.io">theswolf.github.io</a>  | hosted in 🇫🇷 with ❤️</p>
-</div>
+    <div class="footer">
+        <p>&copy; <a href="https://theswolf.github.io">theswolf.github.io</a> | hosted in 🇫🇷 with ❤️</p>
+    </div>
 
 </body>
+
 </html>
